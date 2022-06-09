@@ -1,30 +1,16 @@
 const express = require("express");
 const { createServer } = require("http");
 const { Server } = require("socket.io");
-const axios = require("axios");
+const axios = require('axios');
 require('dotenv').config();
+
+const bot = require("./bot")
+
 
 
 //Temporary variable to record the current ether gas fee
-let etherGasFee = 1;
-/**
- * Example of how we could update this variable using the crypto api
- */
-
-async function getNewEtherPrice(){
-    try {
-        const apiKey = process.env.ETHERKEY;
-        const response = await axios.get(`https://api.etherscan.io/api?module=gastracker&action=gasoracle&apikey=${apiKey}`);
-        let newGasPrice = response.data.result.ProposeGasPrice;
-        console.log(`New Gas Fee is : ${newGasPrice}`);
-        etherGasFee = newGasPrice;
-
-    } catch (error) {
-        console.log(error);
-    }
-}
-setInterval(getNewEtherPrice, 7000);
-
+bot.config();
+bot.start();
 
 //Server/Socket.io initialization and example of how it can be used
 const app = express();
@@ -35,12 +21,23 @@ const io = new Server(httpServer, {
   },
 });
 
+/*
+For the gas fee table Every Coin Should Have the following object 
+{
+    lowFee - the current lowFee  - not updated un
+    medFee - the current midFee
+    highFee - the current highFee
+    price   - the current price of the coin
+    hrFee - The medFee of the coin one hour ago. Update every hour. 
+}
+*/
+
 io.on("connection", (socket) => {
 
     let updateEther = () => {
-        socket.emit("EtherUpdate" , {"GasFee" : etherGasFee});        
+        socket.emit("EthUpdate" , bot.currData.Eth);        
     }
 
-    setInterval(updateEther, 1000);
+    setInterval(updateEther, 5000);
 })
 httpServer.listen(5000);
