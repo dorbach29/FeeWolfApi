@@ -1,7 +1,7 @@
 const api = require('./Fees')
 
 
-const CoinNames = ["Eth" , "Car", "Sol", "Dot", "Icp"];
+const CoinNames = ["Eth" , "Ftm", "Matic", "Bnb", "Icp"];
 const DataSchema = () => {return {
     fees : {
         lowFee : -1,
@@ -42,12 +42,11 @@ module.exports = {
         if(!self.running){
             console.log("Bot.start() has been called and ran")
             self.running = true;
-            setInterval(this.setNewEtherFees, 5 * 1000); //Gets ethereum fees
             setInterval(this.setNewEtherFees, 3000);
             setInterval(this.setNewBnbFees, 3000);
             setInterval(this.setNewFtmFees, 3000);
             setInterval(this.setNewMaticFees, 3000);
-            setInterval(this.calcAverages,  5 * 60 * 1000); //Calculates average fees for all coins
+            setInterval(this.calcAverages,   10 *  60 * 1000); //Calculates average fees for all coins
             return true;
         }
         return false;
@@ -64,8 +63,8 @@ module.exports = {
             self.currData.Eth.fees = newEtherFees;
             self.currData.Eth.hrFeeSum += Number(newEtherFees.medFee);
             self.currData.Eth.hrFeeCount += 1;
-            console.log("ETH");
-            console.log(self.currData.Eth.fees)
+            //console.log("ETH");
+            //console.log(self.currData.Eth.fees)
         } catch (error){
             console.log(error);
         }
@@ -76,8 +75,10 @@ module.exports = {
         try{
             let newBnbFees = await api.getNewBnbFees();
             self.currData.Bnb.fees = newBnbFees;
-            console.log("BNB");
-            console.log(newBnbFees);
+            self.currData.Bnb.hrFeeSum += Number(newBnbFees.medFee);
+            self.currData.Bnb.hrFeeCount += 1;
+           // console.log("BNB");
+            //console.log(newBnbFees);
         } catch(error){
             console.log(error);
         }
@@ -87,8 +88,10 @@ module.exports = {
         try{
             let newFtmFees = await api.getNewFtmFees();
             self.currData.Ftm.fees = newFtmFees;
-            console.log("FTM");
-            console.log(newFtmFees);
+            self.currData.Ftm.hrFeeSum += Number(newFtmFees.medFee);
+            self.currData.Ftm.hrFeeCount += 1;
+            //console.log("FTM");
+            //console.log(newFtmFees);
         } catch(error){
             console.log(error);
         }
@@ -98,8 +101,10 @@ module.exports = {
         try{
             let newMaticFees = await api.getNewMaticFees();
             self.currData.Matic.fees = newMaticFees;
-            console.log("Matic");
-            console.log(newMaticFees)
+            self.currData.Matic.hrFeeSum += Number(newMaticFees.medFee);
+            self.currData.Matic.hrFeeCount += 1;
+            //console.log("Matic");
+            //console.log(newMaticFees)
         } catch (error){
             console.log(error);
         }
@@ -113,6 +118,8 @@ module.exports = {
            self.currData[coinName].hrFeeSum = 0;
            self.currData[coinName].hrFeeCount = 0;
            self.currData[coinName].hrFeeAvg = avg;
+           console.log(coinName);
+           console.log(self.currData[coinName].hrFeeAvg);
            return;
         }        
     },

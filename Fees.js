@@ -20,7 +20,7 @@ module.exports = {
                 highFee: -1,
             }
             const apiKey = process.env.ETHERKEY;
-            const response = await axios.get(`https://api.etherscan.io/api?module=gastracker&action=gasoracle&apikey=${apiKey}`);
+            const response = await axios.get(`https://api.etherscan.io/api?module=gastracker&action=gasoracle&apikey=${process.env.ETHERKEY}`);
             EtherFees.medFee = response.data.result.ProposeGasPrice;            
             EtherFees.lowFee = response.data.result.SafeGasPrice;
             EtherFees.highFee = response.data.result.FastGasPrice;
@@ -39,7 +39,7 @@ module.exports = {
                 highFee: -1,
             }
             //const apiKey = SCIB192RJ6MGPDZVX8YDS48H1PXBZ99GK6;
-            const response = await axios.get(`https://api.bscscan.com/api?module=gastracker&action=gasoracle&apikey=SCIB192RJ6MGPDZVX8YDS48H1PXBZ99GK6`);
+            const response = await axios.get(`https://api.bscscan.com/api?module=gastracker&action=gasoracle&apikey=${process.env.BNBKEY}`);
             BnbFees.medFee = response.data.result.ProposeGasPrice;            
             BnbFees.lowFee = response.data.result.SafeGasPrice;
             BnbFees.highFee = response.data.result.FastGasPrice;
@@ -57,7 +57,7 @@ module.exports = {
                 highFee: -1,
             }
             //const apiKey = RY3HP44ZY1HTS1EYPX4YV3HZSA9X8RBWW5;
-            const response = await axios.get(`https://api.ftmscan.com/api?module=gastracker&action=gasoracle&apikey=RY3HP44ZY1HTS1EYPX4YV3HZSA9X8RBWW5`);
+            const response = await axios.get(`https://api.ftmscan.com/api?module=gastracker&action=gasoracle&apikey=${process.env.FTMKEY}`);
             FtmFees.medFee = response.data.result.ProposeGasPrice;            
             FtmFees.lowFee = response.data.result.SafeGasPrice;
             FtmFees.highFee = response.data.result.FastGasPrice;
@@ -76,7 +76,7 @@ module.exports = {
                 highFee: -1,
             }
             //const apiKey = 3FI5JZZAYWEKYSY342E9AHNRJYPK7YE449
-            const response = await axios.get(`https://api.polygonscan.com/api?module=gastracker&action=gasoracle&apikey=3FI5JZZAYWEKYSY342E9AHNRJYPK7YE449`);
+            const response = await axios.get(`https://api.polygonscan.com/api?module=gastracker&action=gasoracle&apikey=${process.env.MATICKEY}`);
             MaticFees.medFee = response.data.result.ProposeGasPrice;            
             MaticFees.lowFee = response.data.result.SafeGasPrice;
             MaticFees.highFee = response.data.result.FastGasPrice;
