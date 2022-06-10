@@ -37,7 +37,19 @@ io.on("connection", (socket) => {
     let updateEther = () => {
         socket.emit("EthUpdate" , bot.currData.Eth);        
     }
+    let updateBSC = () => {
+        socket.emit("BnbUpdate" , bot.currData.Bnb);        
+    }
+    let updateFtm = () => {
+        socket.emit("FtmUpdate" , bot.currData.Ftm);        
+    }
+    let updateMatic = () => {
+        socket.emit("FtmUpdate" , bot.currData.Matic);        
+    }
 
     setInterval(updateEther, 5000);
+    setInterval(updateBSC, 5000);
+    setInterval(updateFtm, 5000);
+    setInterval(updateMatic, 5000);
 })
 httpServer.listen(5000);
