@@ -8,9 +8,6 @@ const bot = require("./bot")
 
 
 
-//Temporary variable to record the current ether gas fee
-bot.config();
-bot.start();
 
 //Server/Socket.io initialization and example of how it can be used
 const app = express();
@@ -32,12 +29,18 @@ For the gas fee table Every Coin Should Have the following object
 }
 */
 
+bot.config();
 io.on("connection", (socket) => {
 
-    let updateEther = () => {
-        socket.emit("EthUpdate" , bot.currData.Eth);        
+    bot.start();
+    let updateEtherFees = () => {
+        socket.emit("EthUpdate" , bot.currData.Eth.fees);        
+    }
+    let updateEtherAvg = () =>{
+        socket.emit("EthUpdateAvg", bot.currData.Eth.hrFeeAvg)
     }
 
     setInterval(updateEther, 5000);
+    setInterval(updateEtherAvg, 1000);
 })
 httpServer.listen(5000);
