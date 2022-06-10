@@ -1,73 +1,56 @@
 const api = require('./Fees')
 
+
+const CoinNames = ["Eth" , "Car", "Sol", "Dot", "Icp"];
+const DataSchema = () => {return {
+    fees : {
+        lowFee : -1,
+        medFee : -1,
+        highFee: -1,
+    },
+    hrFeeSum : 0,
+    hrFeeCount : 0,
+    hrFeeAvg: -1,
+    price: -1, 
+}}
+
 module.exports = {
     
-    //Object containing the data that this bot updates
-    currData : {
-        Eth :  {
-            lowFee : -1,
-            medFee : -1,
-            highFee: -1,
-            price: -1, 
-            hrFee: -1,
-        },
-        Sol :  {
-            lowFee : -1,
-            medFee : -1,
-            highFee: -1,
-            price: -1, 
-            hrFee: -1,
-        },
-        Car :  {
-            lowFee : -1,
-            medFee : -1,
-            highFee: -1,
-            price: -1, 
-            hrFee: -1,
-        },
-        Ftm :  {
-            lowFee : -1,
-            medFee : -1,
-            highFee: -1,
-            price: -1, 
-            hrFee: -1,
-        },
-        Bnb :  {
-            lowFee : -1,
-            medFee : -1,
-            highFee: -1,
-            price: -1, 
-            hrFee: -1,
-        },
-        Matic :  {
-            lowFee : -1,
-            medFee : -1,
-            highFee: -1,
-            price: -1, 
-            hrFee: -1,
-        }
-    },
-
-   
-
+    currData : {}, //Object where coinData is held. Schema defined in congig method
+    self : -1, //Reference to this object
+    running : false,
+    apiIntervals : [], //Can be used to stop application
 
     /**
      * !Call before accessing any data/starting any bots
-     * This is used to initialize a pointer to itself to be used instead of this
+     * This is used to initialize any dependent values such as self and currData
+     * A schema for currData is defined in this method
      */
-    self : -1,
     config(){
-        self = this;
+        self = this;  
+        //Initializes currData to containe the full list of coins
+        for(let i = 0; i < CoinNames.length; i++){
+            self.currData[CoinNames[i]] = DataSchema();
+        }
     },
     
     /**
-     * Starts updating the different gas fees
+     * Starts pulling the data dynamically
+     * Returns false if the bot is already running
      */
     start(){
-        setInterval(this.setNewEtherFees, 3000);
-        setInterval(this.setNewBnbFees, 3000);
-        setInterval(this.setNewFtmFees, 3000);
-        setInterval(this.setNewMaticFees, 3000);
+        if(!self.running){
+            console.log("Bot.start() has been called and ran")
+            self.running = true;
+            setInterval(this.setNewEtherFees, 5 * 1000); //Gets ethereum fees
+            setInterval(this.setNewEtherFees, 3000);
+            setInterval(this.setNewBnbFees, 3000);
+            setInterval(this.setNewFtmFees, 3000);
+            setInterval(this.setNewMaticFees, 3000);
+            setInterval(this.calcAverages,  5 * 60 * 1000); //Calculates average fees for all coins
+            return true;
+        }
+        return false;
     },
 
 
@@ -78,50 +61,66 @@ module.exports = {
     async setNewEtherFees(){
         try{
             let newEtherFees = await api.getNewEtherFees();
-            self.currData.Eth.lowFee = newEtherFees.lowFee;
-            self.currData.Eth.medFee = newEtherFees.medFee;
-            self.currData.Eth.highFee = newEtherFees.highFee;
-            console.log("Eth");
-            console.log(newEtherFees)
+            self.currData.Eth.fees = newEtherFees;
+            self.currData.Eth.hrFeeSum += Number(newEtherFees.medFee);
+            self.currData.Eth.hrFeeCount += 1;
+            console.log("ETH");
+            console.log(self.currData.Eth.fees)
         } catch (error){
             console.log(error);
         }
     },
 
+
     async setNewBnbFees(){
         try{
             let newBnbFees = await api.getNewBnbFees();
-            self.currData.Bnb.lowFee = newBnbFees.lowFee;
-            self.currData.Bnb.medFee = newBnbFees.medFee;
-            self.currData.Bnb.highFee = newBnbFees.highFee;
+            self.currData.Bnb.fees = newBnbFees;
             console.log("BNB");
             console.log(newBnbFees);
         } catch(error){
             console.log(error);
         }
     },
+  
     async setNewFtmFees(){
         try{
             let newFtmFees = await api.getNewFtmFees();
-            self.currData.Ftm.lowFee = newFtmFees.lowFee;
-            self.currData.Ftm.medFee = newFtmFees.medFee;
-            self.currData.Ftm.highFee = newFtmFees.highFee;
+            self.currData.Ftm.fees = newFtmFees;
             console.log("FTM");
             console.log(newFtmFees);
         } catch(error){
             console.log(error);
         }
     },
+  
     async setNewMaticFees(){
         try{
             let newMaticFees = await api.getNewMaticFees();
-            self.currData.Matic.lowFee = newMaticFees.lowFee;
-            self.currData.Matic.medFee = newMaticFees.medFee;
-            self.currData.Matic.highFee = newMaticFees.highFee;
+            self.currData.Matic.fees = newMaticFees;
             console.log("Matic");
             console.log(newMaticFees)
         } catch (error){
             console.log(error);
         }
     },
-}
+
+    //Runs the computations nessecary to find the average price for a coin
+    calculateAverage(coinName){
+        let coinData = self.currData[coinName]
+        if( coinData.hrFeeCount != 0 ){
+           let avg =  coinData.hrFeeSum / coinData.hrFeeCount;
+           self.currData[coinName].hrFeeSum = 0;
+           self.currData[coinName].hrFeeCount = 0;
+           self.currData[coinName].hrFeeAvg = avg;
+           return;
+        }        
+    },
+
+    //Calculates the average for all coins using calculateAverage helper function
+   calcAverages(){
+        for(let i = 0 ; i < CoinNames.length ; i ++){
+            self.calculateAverage(CoinNames[i]);
+        }
+   }
+} 
