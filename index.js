@@ -9,7 +9,7 @@ const bot = require("./bot")
 
 
 
-//Server/Socket.io initialization and example of how it can be used
+//Server/Socket.io initialization 
 const app = express();
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
@@ -18,41 +18,48 @@ const io = new Server(httpServer, {
   },
 });
 
-/*
-For the gas fee table Every Coin Should Have the following object 
-{
-    lowFee - the current lowFee  - not updated un
-    medFee - the current midFee
-    highFee - the current highFee
-    price   - the current price of the coin
-    hrFee - The medFee of the coin one hour ago. Update every hour. 
-}
-*/
-
 bot.config();
+if(process.argv[2] == "Test")
+{
+ 
+}
+
+/**
+ * Emits an event containing the current data of a particular coin
+ * @param {string} coinName  - Name of the coin to send data of 
+ * @param {socket} socket - Socket.io socket
+ */
+function sendCoinUpdate(coinName, socket){
+    const data = bot.getCoinData(coinName);
+    const event = coinName + "Update";
+    socket.emit(event, data);
+}
+
+/**
+ * Subscirbes the socket to listen to GasFee Table updates
+ * Sets intervals that periodically send out events with respect to certain coins
+ * @param {socket} socket 
+ */
+function subscribeSocketGas(socket){
+    const CoinList = bot.getCoinList();
+    for(let i = 0 ; i < CoinList.length; i ++){
+        let currCoin = CoinList[i];
+        setInterval(()=>{
+            sendCoinUpdate(currCoin, socket);
+        }, 5000)
+    }
+
+}
+
+//Socket.io event updates
 io.on("connection", (socket) => {
 
     bot.start();
-    let updateEtherFees = () => {
-        socket.emit("EthUpdate" , bot.currData.Eth.fees);        
-    }
-    let updateEtherAvg = () =>{
-        socket.emit("EthUpdateAvg", bot.currData.Eth.hrFeeAvg)
-    }
-    let updateBSC = () => {
-        socket.emit("BnbUpdate" , bot.currData.Bnb.fees);        
-    }
-    let updateFtm = () => {
-        socket.emit("FtmUpdate" , bot.currData.Ftm.fees);        
-    }
-    let updateMatic = () => {
-        socket.emit("FtmUpdate" , bot.currData.Matic.fees);        
-    }
-
-    setInterval(updateEtherFees, 5000);
-    setInterval(updateBSC, 5000);
-    setInterval(updateFtm, 5000);
-    setInterval(updateMatic, 5000);
-    setInterval(updateEtherAvg, 1000);
+    subscribeSocketGas(socket);    
 })
+
+
 httpServer.listen(5000);
+
+
+

@@ -54,6 +54,26 @@ module.exports = {
 
 
     /**
+     *  This function should be used to get the bots data on any particular coin
+     * @param {String} coinName - Ex: "Eth" "Sol"
+     * @returns {Fees, hrFeeAvg, Price} retObject
+     */
+    getCoinData(coinName){
+        const retObject = {};
+        retObject.fees = self.currData[coinName].fees;
+        retObject.hrFeeAvg = self.currData[coinName].hrFeeAvg;
+        retObject.price = self.currData[coinName].price; 
+        return retObject;
+    },
+
+    /**
+     * Returns list of current coins in use
+     */
+    getCoinList(){
+        return CoinNames;
+    },
+
+    /**
      * Updates the new ether fees on currData (Eth.lowFee Eth.medFee Eth.highFee)
      * To be called by bots in order to keep data updated
      */
@@ -69,7 +89,6 @@ module.exports = {
             console.log(error);
         }
     },
-
 
     async setNewBnbFees(){
         try{
