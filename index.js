@@ -3,26 +3,7 @@ const { createServer } = require("http");
 const { Server } = require("socket.io");
 const axios = require('axios');
 require('dotenv').config();
-
-const bot = require("./bot")
-
-
-
-
-//Server/Socket.io initialization 
-const app = express();
-const httpServer = createServer(app);
-const io = new Server(httpServer, {
-  cors: {
-    origin: true,
-  },
-});
-
-bot.config();
-if(process.argv[2] == "Test")
-{
- 
-}
+const bot = require("./bot");
 
 /**
  * Emits an event containing the current data of a particular coin
@@ -48,14 +29,35 @@ function subscribeSocketGas(socket){
             sendCoinUpdate(currCoin, socket);
         }, 5000)
     }
+}
 
+
+
+
+
+
+
+
+
+
+//Server/Socket.io initialization 
+const app = express();
+const httpServer = createServer(app);
+const io = new Server(httpServer, {
+  cors: {
+    origin: true,
+  },
+});
+bot.config();
+if(process.argv[2] == "Test")
+{
+ 
 }
 
 //Socket.io event updates
 io.on("connection", (socket) => {
-
     bot.start();
-    subscribeSocketGas(socket);    
+    subscribeSocketGas(socket);
 })
 
 

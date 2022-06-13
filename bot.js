@@ -1,7 +1,6 @@
 const api = require('./Fees')
-
-
-const CoinNames = ["Eth" , "Ftm", "Matic", "Bnb", "Icp"];
+const priceApi = require('./CoinPrices')
+const CoinNames = require("./CoinNames")
 const DataSchema = () => {return {
     fees : {
         lowFee : -1,
@@ -46,7 +45,9 @@ module.exports = {
             setInterval(this.setNewBnbFees, 3000);
             setInterval(this.setNewFtmFees, 3000);
             setInterval(this.setNewMaticFees, 3000);
-            setInterval(this.calcAverages,   10 *  60 * 1000); //Calculates average fees for all coins
+            setInterval(this.calcAverages,   2 *  60 * 1000); //Calculates average fees for all coins
+            setInterval(this.setCoinPrices, 1 * 10 * 1000)
+            setInterval(this.logData, 1*5*1000);
             return true;
         }
         return false;
@@ -59,8 +60,14 @@ module.exports = {
      * @returns {Fees, hrFeeAvg, Price} retObject
      */
     getCoinData(coinName){
-        const retObject = {};
-        retObject.fees = self.currData[coinName].fees;
+        const retObject = {
+            fees : {
+
+            }
+        };
+        retObject.fees.lowFee = Number(self.currData[coinName].fees.lowFee);
+        retObject.fees.medFee = Number(self.currData[coinName].fees.medFee);
+        retObject.fees.highFee = Number(self.currData[coinName].fees.highFee);
         retObject.hrFeeAvg = self.currData[coinName].hrFeeAvg;
         retObject.price = self.currData[coinName].price; 
         return retObject;
@@ -129,6 +136,18 @@ module.exports = {
         }
     },
 
+    async setCoinPrices(){
+        try {
+            let prices = await priceApi.getCoinPrices();
+            for(let i = 0 ; i < CoinNames.length; i ++){
+                let coin = CoinNames[i]; 
+                self.currData[coin].price = prices[coin];
+            }
+        } catch (error){
+            console.log(error);
+        }
+    },
+
     //Runs the computations nessecary to find the average price for a coin
     calculateAverage(coinName){
         let coinData = self.currData[coinName]
@@ -137,8 +156,8 @@ module.exports = {
            self.currData[coinName].hrFeeSum = 0;
            self.currData[coinName].hrFeeCount = 0;
            self.currData[coinName].hrFeeAvg = avg;
-           console.log(coinName);
-           console.log(self.currData[coinName].hrFeeAvg);
+           //console.log(coinName);
+           //console.log(self.currData[coinName].hrFeeAvg);
            return;
         }        
     },
@@ -148,5 +167,13 @@ module.exports = {
         for(let i = 0 ; i < CoinNames.length ; i ++){
             self.calculateAverage(CoinNames[i]);
         }
+   },
+
+   logData(){
+       for(let i = 0; i < CoinNames.length; i ++){
+           let coin = CoinNames[i];
+           console.log(coin);
+           console.log(self.currData[coin]);
+       }
    }
 } 
