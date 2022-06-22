@@ -1,5 +1,5 @@
 const axios = require('axios')
-const CoinNames = require("./CoinNames");
+const CoinNames = require("./data");
 
 /**
  * A mapping of the Coin ID's on our end to those CoinGecko uses
