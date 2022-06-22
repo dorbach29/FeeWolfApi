@@ -1,6 +1,6 @@
-const api = require('./Fees')
-const priceApi = require('./CoinPrices')
-const CoinNames = require("./CoinNames")
+const api = require('./fees')
+const priceApi = require('./coinPrices')
+const CoinNames = require("./data")
 const DataSchema = () => {return {
     fees : {
         lowFee : -1,
