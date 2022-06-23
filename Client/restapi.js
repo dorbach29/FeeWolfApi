@@ -8,17 +8,11 @@ const bot = require("../Data/databot");
  */
 
 router.get("/", (req, res , next)=> {
-    res.send("Nothing to see here");
+    res.json(bot.currData);
 })
-
-
 
 router.get("/:coin" , (req, res, next) => {
     const coin  = req.params.coin;
-
-
 })
-
-
 
 module.exports = router;
