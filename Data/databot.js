@@ -52,6 +52,13 @@ module.exports = {
     /**
      * Updates the new ether fees on currData (Eth.lowFee Eth.medFee Eth.highFee)
      * To be called by bots in order to keep data updated
+     * 
+     * fees :
+     * {
+     * lowFee : Number,
+     * medFee : Number,
+     * highFee : Number
+     * }
      */
     async setNewEtherFees(){
         try{

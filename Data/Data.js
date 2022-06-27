@@ -234,8 +234,9 @@ const DatabaseMethods = {
     //Methods relating to the GasFee Table
     GasFees : {
         Fees :{
+            //
             getCoin : feeGetCoinData, //Gets all $ data on the coin
-            setCoinFees : feeSetCoinFees, //Gets fee obj for a coin
+            setCoinFees : feeSetCoinFees, //params (coinName, fees)
             setCoinPrice : feeSetCoinPrice, 
             increaseHrFeeSum : feeIncreaseHrFeeSum, //Increses the sum and count to calculate avg
             setCoinAverage : feeSetCoinAverage, //Calcs avg using count and sum, resets both to 0
