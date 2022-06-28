@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const bot = require("../Data/databot");
 const database = require("../Data/data")
+const CoinNameList = ["Eth" , "Ftm", "Matic", "Bnb"];
 
 /**
  * Express route
@@ -24,11 +25,22 @@ router.get("/", (req, res , next)=> {
 /**
  * "/gas/[coinName]"
  */
-router.get("/:coin" , (req, res, next) => {
+
+router.get("/coin/:coin" , (req, res, next) => {
     let coinInfo = {};
     const coin  = req.params.coin;
     coinInfo = database.GasFees.Fees.getCoin(coin)
     res.json(coinInfo);
+})
+
+router.get("/allCoins" , (req, res, next) => {
+    let coinInfo = {};
+    let coinInfoList = [];
+    for(i = 0; i < CoinNameList.length; i++){
+        coinInfo =  database.GasFees.Fees.getCoin(CoinNameList[i]);
+        coinInfoList[coinInfoList.length] = coinInfo;
+    }
+    res.json(coinInfoList);
 })
 
 module.exports = router;
