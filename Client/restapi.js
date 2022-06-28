@@ -3,6 +3,7 @@ const router = express.Router();
 const bot = require("../Data/databot");
 const database = require("../Data/data")
 const CoinNameList = ["Eth" , "Ftm", "Matic", "Bnb"];
+//let names = database.CoinNames.getAll;
 
 /**
  * Express route
@@ -41,6 +42,16 @@ router.get("/allCoins" , (req, res, next) => {
         coinInfoList[coinInfoList.length] = coinInfo;
     }
     res.json(coinInfoList);
+})
+
+router.get("/metadata" , (req, res, next) => {
+    let coinMeta = {};
+    let coinMetaList = [];
+    for(i = 0; i < CoinNameList.length; i++){
+        coinMeta =  database.MetaData.getCoinMetaData(CoinNameList[i]);
+        coinMetaList[coinMetaList.length] = coinMeta;
+    }
+    res.json(coinMetaList);
 })
 
 module.exports = router;
