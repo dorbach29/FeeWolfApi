@@ -34,7 +34,7 @@ router.get("/coin/:coin" , (req, res, next) => {
     res.json(coinInfo);
 })
 
-router.get("/allCoins" , (req, res, next) => {
+router.get("/allFees" , (req, res, next) => {
     let coinInfo = {};
     let coinInfoList = [];
     for(i = 0; i < CoinNameList.length; i++){
@@ -43,15 +43,28 @@ router.get("/allCoins" , (req, res, next) => {
     }
     res.json(coinInfoList);
 })
-/*
-router.get("/metadata" , (req, res, next) => {
+
+router.get("/allMetaData" , (req, res, next) => {
     let coinMeta = {};
     let coinMetaList = [];
     for(i = 0; i < CoinNameList.length; i++){
-        coinMeta =  database.MetaData.getCoinMetaData(CoinNameList[i]);
+        coinMeta =  database.GasFees.MetaData.getCoin(CoinNameList[i]);
         coinMetaList[coinMetaList.length] = coinMeta;
     }
     res.json(coinMetaList);
 })
-*/
+
+router.get("/allData" , (req, res, next) => {
+    let coinMetaInfo = {};
+    let coinGasInfo = {};
+    let coinInformationList = [];
+    for(i = 0; i < CoinNameList.length; i++){
+        coinMetaInfo =  database.GasFees.MetaData.getCoin(CoinNameList[i]);
+        coinGasInfo =  database.GasFees.Fees.getCoin(CoinNameList[i]);
+        //It comes out as coinMetaInfo: the info and coinGasInfo: the info in one object.
+        coinInformationList[coinInformationList.length] = {coinMetaInfo , coinGasInfo};
+    }
+    res.json(coinInformationList);
+})
+
 module.exports = router;
