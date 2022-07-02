@@ -10,10 +10,8 @@ const CoinGeckoIds = {
     "Bnb" : "binancecoin",
     "Ftm" : "fantom",
     "Matic" : "matic-network",
-    "Dot" : "polkadot",
-    "Icp" : "internet-computer",
-    "Sol" : "solana",
-    "Car" : "cardano"
+    "Movr" : "moonriver",
+    "Avax" : "avalanche-2",
 }
 
 function coinGeckoIdString(){

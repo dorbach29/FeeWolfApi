@@ -8,7 +8,7 @@
  * @description CoinNames Currently Displayed on GasFee Table as well as a way to get these Coin Names
  */
 
-const CoinNamesList = ["Eth" , "Ftm", "Matic", "Bnb", "Icp", "Dot", "Sol", "Car"];
+const CoinNamesList = ["Eth" , "Ftm", "Matic", "Bnb", "Avax", "Movr"];
 
 function coinsGetAll(){
     return [...CoinNamesList];
@@ -141,36 +141,23 @@ const MetaData = {
             key: 4,
         
           },
-        "Sol" : {
-            logoLink: "/SolLogo.png",
-            logoDesc : "Solano Logo",
-            name : "Solana",
-            socketEvent: "SolUpdate",
+        "Avax" : {
+            logoLink: "/AvaxLogo.png",
+            logoDesc : "Avax Logo",
+            name : "Avalanche",
+            socketEvent: "AvaxUpdate",
             key: 2,
         
           },
-        "Car" : {
-            logoLink: "/CarLogo.png",
-            logoDesc : "Cardano Logo",
-            name : "Cardano",
-            socketEvent: "CarUpdate",
+        "Movr" : {
+            logoLink: "/MovrLogo.png",
+            logoDesc : "MoonRiver Logo",
+            name : "MoonRiver",
+            socketEvent: "MovrUpdate",
             key: 3,
         
           },
-        "Icp" : {
-            logoLink: "/IcpLogo.png",
-            logoDesc : "Internet Computer Logo",
-            name : "Internet Computer",
-            socketEvent: "IcpUpdate",
-            key: 4,
-          },
-        "Dot" : {
-            logoLink: "/DotLogo.png",
-            logoDesc : "Polkadot Logo",
-            name : "Polkadot",
-            socketEvent: "DotUpdate",
-            key: 5,
-          },
+        
     }
 };
 
@@ -201,10 +188,10 @@ function test(){
     if(feeTest.price != 100000)
         console.log("getCoinFeeData() Test 2 failed");
 
-    feeSetCoinFees("Sol", {lowFee: 10, medFee: 10, highFee:10})
-    let test2Result = feeSetCoinFees("Solasola", {lowFee: 10, medFee: 10, highFee:10})
+    feeSetCoinFees("Bnb", {lowFee: 10, medFee: 10, highFee:10})
+    let test2Result = feeSetCoinFees("Bbbbnnnbbb", {lowFee: 10, medFee: 10, highFee:10})
 
-    if(feeGetCoinData("Sol").fees.medFee != 10)
+    if(feeGetCoinData("Bnb").fees.medFee != 10)
         console.log("feeSetCoinFees() Test 1 failed");
     
     if(test2Result != "Error no such coin")

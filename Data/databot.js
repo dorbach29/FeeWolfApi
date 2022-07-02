@@ -31,6 +31,8 @@ module.exports = {
             setInterval(this.setNewBnbFees, 3000);
             setInterval(this.setNewFtmFees, 3000);
             setInterval(this.setNewMaticFees, 3000);
+            setInterval(this.setNewAvaxFees, 3000);
+            setInterval(this.setNewMovrFees, 3000);
             setInterval(Database.setAverages,   2 *  60 * 1000); //Calculates average fees for all coins
             setInterval(this.setCoinPrices, 1 * 10 * 1000)
             setInterval(this.logData, 1*5*1000);
@@ -101,6 +103,27 @@ module.exports = {
             console.log(error);
         }
     },
+
+    async setNewAvaxFees(){
+        try{
+            let newAvaxFees = await api.getNewAvaxFees();
+            Database.setCoinFees("Avax", newAvaxFees);
+            Database.increaseHrFeeSum("Avax" , newAvaxFees.medFee);
+        } catch (error){
+            console.log(error);
+        }
+    },
+
+    async setNewMovrFees(){
+        try{
+            let newMovrFees = await api.getNewMovrFees();
+            Database.setCoinFees("Movr", newMovrFees);
+            Database.increaseHrFeeSum("Movr" , newMovrFees.medFee);
+        } catch (error){
+            console.log(error);
+        }
+    },
+
 
     async setCoinPrices(){
         try {
