@@ -1,5 +1,5 @@
 const axios = require('axios')
-const CoinNames = require("./data");
+const CoinNames = require("./data").CoinNames.getAll();
 
 /**
  * A mapping of the Coin ID's on our end to those CoinGecko uses
@@ -10,10 +10,8 @@ const CoinGeckoIds = {
     "Bnb" : "binancecoin",
     "Ftm" : "fantom",
     "Matic" : "matic-network",
-    "Dot" : "polkadot",
-    "Icp" : "internet-computer",
-    "Sol" : "solana",
-    "Car" : "cardano"
+    "Movr" : "moonriver",
+    "Avax" : "avalanche-2",
 }
 
 function coinGeckoIdString(){

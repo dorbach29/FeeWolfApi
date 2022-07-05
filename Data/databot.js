@@ -1,21 +1,11 @@
 const api = require('./fees')
 const priceApi = require('./coinPrices')
-const CoinNames = require("./data")
-const DataSchema = () => {return {
-    fees : {
-        lowFee : -1,
-        medFee : -1,
-        highFee: -1,
-    },
-    hrFeeSum : 0,
-    hrFeeCount : 0,
-    hrFeeAvg: -1,
-    price: -1, 
-}}
+const Database = require("./data").GasFees.Fees;
+const CoinNames = require("./data").CoinNames.getAll();
+
 
 module.exports = {
     
-    currData : {}, //Object where coinData is held. Schema defined in congig method
     self : -1, //Reference to this object
     running : false,
     apiIntervals : [], //Can be used to stop application
@@ -27,10 +17,6 @@ module.exports = {
      */
     config(){
         self = this;  
-        //Initializes currData to containe the full list of coins
-        for(let i = 0; i < CoinNames.length; i++){
-            self.currData[CoinNames[i]] = DataSchema();
-        }
     },
     
     /**
@@ -45,7 +31,9 @@ module.exports = {
             setInterval(this.setNewBnbFees, 3000);
             setInterval(this.setNewFtmFees, 3000);
             setInterval(this.setNewMaticFees, 3000);
-            setInterval(this.calcAverages,   2 *  60 * 1000); //Calculates average fees for all coins
+            setInterval(this.setNewAvaxFees, 3000);
+            setInterval(this.setNewMovrFees, 3000);
+            setInterval(Database.setAverages,   2 *  60 * 1000); //Calculates average fees for all coins
             setInterval(this.setCoinPrices, 1 * 10 * 1000)
             setInterval(this.logData, 1*5*1000);
             return true;
@@ -60,38 +48,25 @@ module.exports = {
      * @returns {Fees, hrFeeAvg, Price} retObject
      */
     getCoinData(coinName){
-        const retObject = {
-            fees : {
-
-            }
-        };
-        retObject.fees.lowFee = Number(self.currData[coinName].fees.lowFee);
-        retObject.fees.medFee = Number(self.currData[coinName].fees.medFee);
-        retObject.fees.highFee = Number(self.currData[coinName].fees.highFee);
-        retObject.hrFeeAvg = self.currData[coinName].hrFeeAvg;
-        retObject.price = self.currData[coinName].price; 
-        return retObject;
-    },
-
-    /**
-     * Returns list of current coins in use
-     */
-    getCoinList(){
-        return CoinNames;
+        return Database.getCoin(coinName);
     },
 
     /**
      * Updates the new ether fees on currData (Eth.lowFee Eth.medFee Eth.highFee)
      * To be called by bots in order to keep data updated
+     * 
+     * fees :
+     * {
+     * lowFee : Number,
+     * medFee : Number,
+     * highFee : Number
+     * }
      */
     async setNewEtherFees(){
         try{
             let newEtherFees = await api.getNewEtherFees();
-            self.currData.Eth.fees = newEtherFees;
-            self.currData.Eth.hrFeeSum += Number(newEtherFees.medFee);
-            self.currData.Eth.hrFeeCount += 1;
-            //console.log("ETH");
-            //console.log(self.currData.Eth.fees)
+            Database.setCoinFees("Eth", newEtherFees);
+            Database.increaseHrFeeSum("Eth" , newEtherFees.medFee);
         } catch (error){
             console.log(error);
         }
@@ -100,11 +75,8 @@ module.exports = {
     async setNewBnbFees(){
         try{
             let newBnbFees = await api.getNewBnbFees();
-            self.currData.Bnb.fees = newBnbFees;
-            self.currData.Bnb.hrFeeSum += Number(newBnbFees.medFee);
-            self.currData.Bnb.hrFeeCount += 1;
-           // console.log("BNB");
-            //console.log(newBnbFees);
+            Database.setCoinFees("Bnb", newBnbFees);
+            Database.increaseHrFeeSum("Bnb" , newBnbFees.medFee);
         } catch(error){
             console.log(error);
         }
@@ -113,9 +85,8 @@ module.exports = {
     async setNewFtmFees(){
         try{
             let newFtmFees = await api.getNewFtmFees();
-            self.currData.Ftm.fees = newFtmFees;
-            self.currData.Ftm.hrFeeSum += Number(newFtmFees.medFee);
-            self.currData.Ftm.hrFeeCount += 1;
+            Database.setCoinFees("Ftm", newFtmFees);
+            Database.increaseHrFeeSum("Ftm" , newFtmFees.medFee);
             //console.log("FTM");
             //console.log(newFtmFees);
         } catch(error){
@@ -126,54 +97,51 @@ module.exports = {
     async setNewMaticFees(){
         try{
             let newMaticFees = await api.getNewMaticFees();
-            self.currData.Matic.fees = newMaticFees;
-            self.currData.Matic.hrFeeSum += Number(newMaticFees.medFee);
-            self.currData.Matic.hrFeeCount += 1;
-            //console.log("Matic");
-            //console.log(newMaticFees)
+            Database.setCoinFees("Matic", newMaticFees);
+            Database.increaseHrFeeSum("Matic" , newMaticFees.medFee);
         } catch (error){
             console.log(error);
         }
     },
+
+    async setNewAvaxFees(){
+        try{
+            let newAvaxFees = await api.getNewAvaxFees();
+            Database.setCoinFees("Avax", newAvaxFees);
+            Database.increaseHrFeeSum("Avax" , newAvaxFees.medFee);
+        } catch (error){
+            console.log(error);
+        }
+    },
+
+    async setNewMovrFees(){
+        try{
+            let newMovrFees = await api.getNewMovrFees();
+            Database.setCoinFees("Movr", newMovrFees);
+            Database.increaseHrFeeSum("Movr" , newMovrFees.medFee);
+        } catch (error){
+            console.log(error);
+        }
+    },
+
 
     async setCoinPrices(){
         try {
             let prices = await priceApi.getCoinPrices();
             for(let i = 0 ; i < CoinNames.length; i ++){
                 let coin = CoinNames[i]; 
-                self.currData[coin].price = prices[coin];
+                Database.setCoinPrice(coin, prices[coin])
             }
         } catch (error){
             console.log(error);
         }
     },
 
-    //Runs the computations nessecary to find the average price for a coin
-    calculateAverage(coinName){
-        let coinData = self.currData[coinName]
-        if( coinData.hrFeeCount != 0 ){
-           let avg =  coinData.hrFeeSum / coinData.hrFeeCount;
-           self.currData[coinName].hrFeeSum = 0;
-           self.currData[coinName].hrFeeCount = 0;
-           self.currData[coinName].hrFeeAvg = avg;
-           //console.log(coinName);
-           //console.log(self.currData[coinName].hrFeeAvg);
-           return;
-        }        
-    },
-
-    //Calculates the average for all coins using calculateAverage helper function
-   calcAverages(){
-        for(let i = 0 ; i < CoinNames.length ; i ++){
-            self.calculateAverage(CoinNames[i]);
-        }
-   },
 
    logData(){
        for(let i = 0; i < CoinNames.length; i ++){
            let coin = CoinNames[i];
-           console.log(coin);
-           console.log(self.currData[coin]);
+           console.log(Database.getCoin(coin));
        }
    }
 } 

@@ -1,4 +1,5 @@
 const bot = require("../Data/databot");
+const CoinList = require("../Data/data").CoinNames.getAll();
 /** This file contains websocket logic for sending the client updates on gas fees
  *  In the future this file will assign all websocket functionality needed to the socket
  * 
@@ -21,7 +22,6 @@ function sendCoinUpdate(coinName, socket){
  * @param {socket} socket 
  */
 function subscribeSocketGas(socket){
-    const CoinList = bot.getCoinList();
     for(let i = 0 ; i < CoinList.length; i ++){
         let currCoin = CoinList[i];
         setInterval(()=>{

@@ -87,6 +87,45 @@ module.exports = {
             return "Error"
         }
     },
+    async getNewAvaxFees(){
+        try {
+            let AvaxFees = {
+                lowFee : -1,
+                medFee : -1,
+                highFee: -1,
+            }
+            const response = await axios.get(`https://gavax.blockscan.com/gasapi.ashx?apikey=key&method=gasoracle`);
+            AvaxFees.medFee = response.data.result.ProposeGasPrice;
+            AvaxFees.lowFee = response.data.result.SafeGasPrice;
+            AvaxFees.highFee = response.data.result.FastGasPrice;
+            //also has a price function if you want
+            return AvaxFees;
+
+        } catch (error) {
+            console.log(error);
+            return "Error"
+        }
+     },
+
+      async getNewMovrFees(){
+        try {
+            let MovrFees = {
+                lowFee : -1,
+                medFee : -1,
+                highFee: -1,
+            }
+            const response = await axios.get(`https://gmriver.blockscan.com/gasapi.ashx?apikey=key&method=gasoracle`);
+            MovrFees.medFee = response.data.result.ProposeGasPrice;
+            MovrFees.lowFee = response.data.result.SafeGasPrice;
+            MovrFees.highFee = response.data.result.FastGasPrice;
+            //also has a price function if you want
+            return MovrFees;
+
+        } catch (error) {
+            console.log(error);
+            return "Error"
+        }
+  },
 
 }
 

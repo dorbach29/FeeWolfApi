@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon index.js",
-    "script" : "nodemon index.js Test"
+    "script": "nodemon index.js Test"
   },
   "keywords": [
     "Crypto",
