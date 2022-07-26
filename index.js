@@ -1,9 +1,9 @@
 const express = require("express");
 const { createServer } = require("http");
 const { Server } = require("socket.io");
-const bot = require("./Data/databot");
-const handleSocket = require("./Client/ws"); //websocket api
-const gasRoute = require("./Client/restapi");
+const bot = require("./GasFees/FeeBot");
+const handleSocket = require("./Routes/gas.sockets"); //websocket api
+const gasRoute = require("./Routes/gas");
 bot.config();
 bot.start();
 
