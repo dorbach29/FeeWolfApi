@@ -47,6 +47,8 @@ test("isHeap()" , ()=>{
 
 })
 
+//TODO Test Heapify
+
 test("percolateDown()" , ()=>{
     let tree1 = [   
         74, 
@@ -54,7 +56,27 @@ test("percolateDown()" , ()=>{
     54,5,  59 
     ];
     
+
+
     Heap.percolateDown(tree1 , 2);
     expect(tree1[5]).toBe(46);
     expect(tree1[2]).toBe(59);
+
+    let tree2 = [0, 2, 1]
+    Heap.percolateDown(tree2, 0)
+    Heap.percolateDown(tree2, 1)
+    expect(tree2[0]).toBe(2)
 }) 
+
+test("extractMax()" , ()=>{
+    let set1 = [19, 4, 25, 6, 1, 103, 5, 18]
+    let heap1 = Heap.heapify(set1);
+    let heap2 = [1]
+
+    expect(Heap.extractMax(heap1)).toBe(103);
+    expect(Heap.extractMax(heap1)).toBe(25);
+    expect(heap1.length).toBe(6)
+    expect(Heap.extractMax(heap2)).toBe(1)    
+    expect(Heap.extractMax(heap2)).toBe(null)
+
+})
