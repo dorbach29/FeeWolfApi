@@ -5,10 +5,10 @@ One section that calculates what level we are in for each exchange
 And then sorting
 */
 
-const exchangeNameList = ["Coinbase", "Gemini", "Kucoin", "Binance", "CryptoCom", "FTX"];
+//const exchangeNameList = ["Coinbase", "Gemini", "Kucoin", "Binance", "CryptoCom", "FTX"];
 let amount;
 let marketOrder = true;
-// True = MarketOrder, False = Limit Order (taker)
+// True = MarketOrder (maker), False = Limit Order (taker)
 //Maker = market Order
 //Taker = limit order
 function CoinbaseFee(amount){
@@ -52,7 +52,7 @@ function GeminiFee(amount){
 function KuCoinFee(amount, marketOrder){
     let kuFee = 0.0;
     /*Maker Fees
-    There is 0 transaction fee for maker orders with 1000 to <15000 being traded
+    There is 0 transaction fee for maker orders with 2000 to <15000 being traded
     However, 15000+ there is a negative fee ? Need to discuss this.
     */
     if (marketOrder == true){
@@ -134,3 +134,116 @@ function KuCoinFee(amount, marketOrder){
     return kuFee;
     //return kuFee + amount
 }
+
+function BinanceFee(amount){
+    let biFee = 0.0;
+    biFee = amount * .0010;
+    return biFee;
+}
+
+function CryptoComFee(amount, marketOrder){
+    let comFee = 0.0;
+    
+    if (marketOrder == true){
+        if(amount <= 25000){
+            comFee = amount * .004;
+        } 
+        else if((amount >= 25001)&&(amount <= 50000)){
+            comFee = amount * .0035;
+        }
+        else if((amount >= 50001)&&(amount < 100000)){
+            comFee = amount * .0015;
+        }
+        else if((amount >= 100001)&&(amount < 250000)){
+             comFee = amount * .001;
+        }
+        else if((amount >= 250001)&&(amount < 1000000)){
+             comFee = amount * .0009;
+        }
+        else if((amount >= 1000001)&&(amount < 20000000)){
+            comFee = amount * .0008;
+        }
+        else if((amount >= 20000001)&&(amount < 100000000)){
+            comFee = amount * .0007;
+        }
+        else if((amount >= 100000001)&&(amount < 200000000)){
+            comFee = amount * .0006;
+        }
+    }
+    if (marketOrder == false){
+        if(amount <= 25000){
+            comFee = amount * .004;
+        } 
+        else if((amount >= 25001)&&(amount <= 50000)){
+            comFee = amount * .0035;
+        }
+        else if((amount >= 50001)&&(amount < 100000)){
+            comFee = amount * .0025;
+        }
+        else if((amount >= 100001)&&(amount < 250000)){
+             comFee = amount * .0016;
+        }
+        else if((amount >= 250001)&&(amount < 1000000)){
+             comFee = amount * .0015;
+        }
+        else if((amount >= 1000001)&&(amount < 20000000)){
+            comFee = amount * .0014;
+        }
+        else if((amount >= 20000001)&&(amount < 100000000)){
+            comFee = amount * .0013;
+        }
+        else if((amount >= 100000001)&&(amount < 200000000)){
+            comFee = amount * .0012;
+        }
+    }
+    return comFee;
+    //return kuFee + amount
+}
+
+function FTXFee(amount, marketOrder){
+    let ftxFee = 0.0;
+    
+    if (marketOrder == true){
+        if(amount <= 2000000){
+            ftxFee = amount * .0020;
+        } 
+        else if((amount >= 2000000)&&(amount < 5000000)){
+            ftxFee = amount * .0015;
+        }
+        else if((amount >= 5000000)&&(amount < 10000000)){
+            ftxFee = amount * .001;
+        }
+        else if((amount >= 10000000)&&(amount < 25000000)){
+             ftxFee = amount * .0005;
+        }
+        else if((amount >= 25000000)&&(amount < 50000000)){
+             ftxFee = amount;
+        }
+        else if((amount > 50000000)){
+            ftxFee = amount;
+        }
+    }
+    if (marketOrder == false){
+        if(amount <= 2000000){
+            ftxFee = amount * .0070;
+        } 
+        else if((amount >= 2000000)&&(amount < 5000000)){
+            ftxFee = amount * .0060;
+        }
+        else if((amount >= 5000000)&&(amount < 10000000)){
+            ftxFee = amount * .0055;
+        }
+        else if((amount >= 10000000)&&(amount < 25000000)){
+             ftxFee = amount * .0050;
+        }
+        else if((amount >= 25000000)&&(amount < 50000000)){
+             ftxFee = amount * .0045;
+        }
+        else if((amount > 50000000)){
+            ftxFee = amount * .0040;
+        }
+    }
+    return ftxFee;
+
+}
+
