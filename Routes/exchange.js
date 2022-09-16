@@ -19,6 +19,19 @@
  * call hea
  */
 
+
+ router.get('/getAll',  (req, res, error)=>{
+
+    //call result = ExchangeHandler.getAllData(inputVal)
+    //Return result
+
+     //Get InputVal
+     //Get All exhange fees
+     //Sort all exchange fees
+     //Get all meta data
+     //Return all metadata
+ })
+
  /** getExchange
   *  param: exchange name
   *  return: exchange info

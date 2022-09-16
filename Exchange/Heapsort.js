@@ -1,3 +1,11 @@
+/**
+ * Example
+ * let array = [{Name : "Kucoin", Fee: 10 }, {Name: "Bitcoin", Fee: 9}]
+ * Heap.heapsort(array, "Fee")
+ * 
+ */
+
+
 
 class Heap {
 
@@ -62,9 +70,11 @@ class Heap {
 
 
     /**
+     * !HEAPSORT!
      * PRIVATE
-     * Heapifies a given array of integers (hopefully to be used by a constructr)
-     * @param {int[]} array 
+     * Heapifies a given arrary of objects, in descending order
+     * 
+     * @parama {array, key} array is the array of objects, key is the field in the objexts to be sorted by
      * @returns {int[]}  heapified array of integers
      */
     static heapify(array, key){
@@ -95,6 +105,7 @@ class Heap {
      * Public
      * Sorts the given array in descending order
      * @param {int[]} array 
+     * 
      */
     static heapSort(array, key){
         let sortedArray = []; 
