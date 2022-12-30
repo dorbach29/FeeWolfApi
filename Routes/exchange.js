@@ -9,7 +9,7 @@ let ExchangeList = database.ExchangeNames.getAll();
  */
 router.get("/",(req,res,next) => {
     res.json("IDK YET");
-}
+})
 
 
 
