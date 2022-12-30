@@ -12,36 +12,38 @@ function CoinbaseFee(amount){
         transactionFee : -1,
     }
     if(amount < 10){
-        coinFee = .99;
+        coinFee.transactionFee = .99;
     } else if(amount < 25){
-        coinFee = 1.49;
+        coinFee.transactionFee = 1.49;
     } else if(amount < 50){
-        coinFee = 1.99;
+        coinFee.transactionFee = 1.99;
     } else if (amount < 200){
-        coinFee = 2.99;
+        coinFee.transactionFee = 2.99;
     }
     return coinFee;
     //it would be return amount + coinFee if we want the actual whole cost.
 }
 
 function GeminiFee(amount){
-    let gemFee = 0.0;
+    let gemFee= {
+        transactionFee : -1,
+    }
     //This is specific to USD obviously.
     if(amount <= 10.00){
-        gemFee = 0.99;
+        gemFee.transactionFee = 0.99;
     } 
     else if ((amount > 10.00)&&(amount <= 25.00)){
-        gemFee = 1.49;
+        gemFee.transactionFee = 1.49;
     }
     else if ((amount > 25.00)&&(amount <= 50.00)){
-        gemFee = 1.99;
+        gemFee.transactionFee = 1.99;
     }
     else if ((amount > 50.00)&&(amount <= 200.00)){
-        gemFee = 2.99;
+        gemFee.transactionFee = 2.99;
     }
     else if(amount >200.00){
         //Above 200 is 1.49%
-        gemFee = amount * .0149;
+        gemFee.transactionFee = amount * .0149;
     }
     return gemFee;
     //return gemFee + amount
