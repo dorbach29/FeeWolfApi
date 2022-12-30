@@ -1,8 +1,15 @@
-
+const express = require('express');
+const router = express.Router();
+const bot = require("../Exchange/ExchangeHandler");
+const database = require("../Exchange/ExchangeData");
+//const CoinNameList = ["Eth" , "Ftm", "Matic", "Bnb"];
+let ExchangeList = database.ExchangeNames.getAll();
 /**
  * Express API
  */
-
+router.get("/",(req,res,next) => {
+    res.json("IDK YET");
+}
 
 
 

@@ -1,9 +1,5 @@
-
-
-/*I think we should have 2 sections of functions. 
-One section that calculates what level we are in for each exchange
-And then sorting
-*/
+const axios = require('axios');
+require('dotenv').config();
 
 //const exchangeNameList = ["Coinbase", "Gemini", "Kucoin", "Binance", "CryptoCom", "FTX"];
 let amount;
@@ -12,7 +8,9 @@ let marketOrder = true;
 //Maker = market Order
 //Taker = limit order
 function CoinbaseFee(amount){
-    let coinFee = 0.0;
+    let coinFee = {
+        transactionFee : -1,
+    }
     if(amount < 10){
         coinFee = .99;
     } else if(amount < 25){
