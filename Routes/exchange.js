@@ -2,13 +2,13 @@ const express = require("express");
 const router = express.Router();
 
 // Import the exchange data and functions
-const ExchangeMetaData = require("./path/to/exchange/data");
-const CoinbaseFee = require("./path/to/exchange/data").CoinbaseFee;
-const GeminiFee = require("./path/to/exchange/data").GeminiFee;
-const KuCoinFee = require("./path/to/exchange/data").KuCoinFee;
-const BinanceFee = require("./path/to/exchange/data").BinanceFee;
-const CryptoComFee = require("./path/to/exchange/data").CryptoComFee;
-const FTXFee = require("./path/to/exchange/data").FTXFee;
+const ExchangeMetaData = require("../Exchange/ExchangeLogic");
+const CoinbaseFee = require("../Exchange/ExchangeLogic").CoinbaseFee;
+const GeminiFee = require("../Exchange/ExchangeLogic").GeminiFee;
+const KuCoinFee = require("../Exchange/ExchangeLogic").KuCoinFee;
+const BinanceFee = require("../Exchange/ExchangeLogic").BinanceFee;
+const CryptoComFee = require("../Exchange/ExchangeLogic").CryptoComFee;
+const FTXFee = require("../Exchange/ExchangeLogic").FTXFee;
 
 /**
  * "/exchanges"
