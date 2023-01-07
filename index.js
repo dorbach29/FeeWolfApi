@@ -4,6 +4,8 @@ const { Server } = require("socket.io");
 const bot = require("./GasFees/FeeBot");
 const handleSocket = require("./Routes/gas.sockets"); //websocket api
 const gasRoute = require("./Routes/gas");
+const exRoute = require("./Routes/exchange");
+
 bot.config();
 bot.start();
 
@@ -11,6 +13,7 @@ bot.start();
 //Initializing https server and routes
 const app = express();
 app.use("/gas", gasRoute);
+app.use("/exchange", exRoute)
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {

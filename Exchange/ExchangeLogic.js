@@ -331,6 +331,48 @@ function getAllTransactions(amount, marketOrder) {
   };
 }
 
+
+// Define the function to sort the exchanges based on their calculated fees
+// Define the function to sort the exchanges based on their calculated fees
+// Define the function to sort the exchanges based on their calculated fees
+function sortTransactions(metadata) {
+    // Create a copy of the metadata object
+    const sortedMetadata = { ...metadata };
+    // Create an array of the metadata for each exchange
+    const exchanges = Object.values(sortedMetadata.Exchanges);
+    // Sort the array of exchanges based on the calculated fee
+    const sortedExchanges = exchanges.sort((a, b) => {
+      // Compare the fees for each exchange
+      if (a.amount > b.amount) {
+        return -1;
+      }
+      if (a.amount < b.amount) {
+        return 1;
+      }
+      // If the fees are equal, return 0
+      return 0;
+    });
+    // Update the sorted metadata object with the sorted exchanges
+    sortedMetadata.Exchanges = sortedExchanges;
+    // Return the sorted metadata object
+    return sortedMetadata;
+  }
+  
+  // Define the function to print all of the metadata
+  function printAllMetadata(metadata) {
+    // Iterate through the metadata for each exchange
+    Object.values(metadata.Exchanges).forEach((exchange) => {
+      // Print the metadata for each exchange
+      console.log(`Exchange: ${exchange.name}`);
+      console.log(`Logo Link: ${exchange.logoLink}`);
+      console.log(`Logo Description: ${exchange.logoDesc}`);
+      console.log(`Withdrawl Fee: ${exchange.withdrawlFee}`);
+      console.log(`Amount: ${exchange.amount}`);
+      console.log("------------------------------");
+    });
+  }
+
+
 const data = getAllTransactions(50, true);
 console.log(data.transactionFees); // { Coinbase: 48.51, Gemini: 48.01, Kucoin: 49.5, Binance: 49.5, "CryptoCom": 50, FTX: 49.5 }
 /*
@@ -338,45 +380,7 @@ const exchangeData = data.search("Coinbase");
 console.log(exchangeData); // { logoLink: '/Coinbase.png', logoDesc: 'Coinbase Logo', name: 'Coinbase', withdrawlFee: -1, transactionFee: 0, fee: 48.51 }
 */
 
-// Define the function to sort the exchanges based on their calculated fees
-// Define the function to sort the exchanges based on their calculated fees
-// Define the function to sort the exchanges based on their calculated fees
-function sortTransactions(metadata) {
-  // Create a copy of the metadata object
-  const sortedMetadata = { ...metadata };
-  // Create an array of the metadata for each exchange
-  const exchanges = Object.values(sortedMetadata.Exchanges);
-  // Sort the array of exchanges based on the calculated fee
-  const sortedExchanges = exchanges.sort((a, b) => {
-    // Compare the fees for each exchange
-    if (a.amount > b.amount) {
-      return -1;
-    }
-    if (a.amount < b.amount) {
-      return 1;
-    }
-    // If the fees are equal, return 0
-    return 0;
-  });
-  // Update the sorted metadata object with the sorted exchanges
-  sortedMetadata.Exchanges = sortedExchanges;
-  // Return the sorted metadata object
-  return sortedMetadata;
-}
 
-// Define the function to print all of the metadata
-function printAllMetadata(metadata) {
-  // Iterate through the metadata for each exchange
-  Object.values(metadata.Exchanges).forEach((exchange) => {
-    // Print the metadata for each exchange
-    console.log(`Exchange: ${exchange.name}`);
-    console.log(`Logo Link: ${exchange.logoLink}`);
-    console.log(`Logo Description: ${exchange.logoDesc}`);
-    console.log(`Withdrawl Fee: ${exchange.withdrawlFee}`);
-    console.log(`Amount: ${exchange.amount}`);
-    console.log("------------------------------");
-  });
-}
 // Sort the exchanges based on their calculated fees
 //sortTransactions(ExchangeMetaData);
 // Print all of the metadata
@@ -386,3 +390,5 @@ console.log("SORTED NOW");
 const sortedMetadata = sortTransactions(ExchangeMetaData);
 // Print all of the metadata
 printAllMetadata(sortedMetadata);
+
+module.exports = {sortTransactions, getAllTransactions}
