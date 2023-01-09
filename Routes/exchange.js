@@ -1,18 +1,18 @@
 const express = require("express");
 const router = express.Router();
 
-// Import the exchange data and functions
 const getAllTransactions = require("../Exchange/ExchangeLogic").getAllTransactions;
 const sortTransactions = require("../Exchange/ExchangeLogic").sortTransactions;
 
 
-const ExchangeMetaData = require("../Exchange/ExchangeLogic");
+const MetaData = require("../Exchange/ExchangeLogic");
 const CoinbaseFee = require("../Exchange/ExchangeLogic").CoinbaseFee;
 const GeminiFee = require("../Exchange/ExchangeLogic").GeminiFee;
 const KuCoinFee = require("../Exchange/ExchangeLogic").KuCoinFee;
 const BinanceFee = require("../Exchange/ExchangeLogic").BinanceFee;
 const CryptoComFee = require("../Exchange/ExchangeLogic").CryptoComFee;
 const FTXFee = require("../Exchange/ExchangeLogic").FTXFee;
+let data = MetaData.ExchangeMetaData;
 
 /**
  * "/exchanges"
@@ -20,15 +20,15 @@ const FTXFee = require("../Exchange/ExchangeLogic").FTXFee;
  * Returns the entire ExchangeMetaData object.
  */
 router.get("/", (req, res, next) => {
-  res.json(ExchangeMetaData);
+  res.json(data);
 });
 
 
 
 router.get("/cheapest", (req, res, next) => {
-  let amount = req.params.amount; 
-  const data = getAllTransactions(amount, true);
-  const sortedMetadata = sortTransactions(ExchangeMetaData);
+  let amount = req.params.amount;
+  let newData = getAllTransactions(amount, true);
+  let sortedMetadata = sortTransactions(newData);
   res.json(sortedMetadata);
 })
 

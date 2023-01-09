@@ -13,7 +13,7 @@ bot.start();
 //Initializing https server and routes
 const app = express();
 app.use("/gas", gasRoute);
-app.use("/exchange", exRoute)
+app.use("/exchange", exRoute);
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {

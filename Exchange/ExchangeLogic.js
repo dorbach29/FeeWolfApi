@@ -307,6 +307,7 @@ function getExchangeData(exchangeName, transactionFees) {
 }
 
 function getAllTransactions(amount, marketOrder) {
+  let copyMetadata = ExchangeMetaData;
   const transactionFees = {
     Coinbase: CoinbaseFee(amount),
     Gemini: GeminiFee(amount),
@@ -320,16 +321,11 @@ function getAllTransactions(amount, marketOrder) {
   Object.keys(transactionFees).forEach((exchange) => {
     ExchangeMetaData.Exchanges[exchange].amount = transactionFees[exchange];
   });
+  copyMetadata = ExchangeMetaData;
 
-  function search(name) {
-    return getExchangeData(name, transactionFees);
-  }
-
-  return {
-    transactionFees,
-    search,
-  };
+  return copyMetadata;
 }
+
 
 
 // Define the function to sort the exchanges based on their calculated fees
