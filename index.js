@@ -6,9 +6,10 @@ const handleSocket = require("./Routes/gas.sockets"); //websocket api
 const gasRoute = require("./Routes/gas");
 const exRoute = require("./Routes/exchange");
 
+/*
 bot.config();
 bot.start();
-
+*/
 
 //Initializing https server and routes
 const app = express();

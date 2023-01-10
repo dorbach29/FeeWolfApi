@@ -20,16 +20,18 @@ let data = MetaData.ExchangeMetaData;
  * Returns the entire ExchangeMetaData object.
  */
 router.get("/", (req, res, next) => {
-  res.json(data);
+  console.log("GET /exchange")
+  res.json(MetaData);
 });
 
 
 
 router.get("/cheapest", (req, res, next) => {
-  let amount = req.params.amount;
-  let newData = getAllTransactions(amount, true);
-  let sortedMetadata = sortTransactions(newData);
-  res.json(sortedMetadata);
+  let amount = req.query.amount;
+  console.log(`GET /exchange/cheapest`);
+  let transactionFees = getAllTransactions(amount, true);
+  let sortedData = sortTransactions(transactionFees);
+  res.json(sortedData);
 })
 
 /**
