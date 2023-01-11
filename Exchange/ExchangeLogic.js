@@ -2,37 +2,37 @@
 const ExchangeMetaData = {
     Exchanges : {
         "Coinbase" : {
-            logoLink : "/Exchange/Coinbase.png",
+            logoLink : "/Exchange/CoinbaseLogo.png",
             logoDesc : "Coinbase Logo",
             name : "Coinbase",
             exchangeID: 1,
         },
         "Gemini" :  {
-            logoLink : "/Exchange/Gemini.png",
+            logoLink : "/Exchange/GeminiLogo.jpg",
             logoDesc : "Gemini Logo",
             name : "Gemini",
             exchangeID: 2,
           },
         "Kucoin" : {
-            logoLink : "/Exchange/Kucoin.png",
+            logoLink : "/Exchange/KucoinLogo.png",
             logoDesc : "Kucoin Logo",
             name: "Kucoin",
             exchangeID: 3,
         },
         "Binance" : {
-            logoLink : "/Exchange/Binance.png",
+            logoLink : "/Exchange/BinanceLogo.png",
             logoDesc : "Binance Logo",
             name: "Binance",
             exchangeID: 4,
         },
         "CryptoCom" : {
-            logoLink : "/Exchange/CryptoCom.png",
+            logoLink : "/Exchange/CryptocomLogo.png",
             logoDesc : "CryptoCom Logo",
             name: "CryptoCom",
             exchangeID: 5,
         },
         "FTX" : {
-            logoLink : "/Exchange/FTX.png",
+            logoLink : "/Exchange/FTXLogo.png",
             logoDesc : "FTX Logo",
             name: "FTX",
             exchangeID: 13,
