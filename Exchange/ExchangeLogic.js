@@ -1,7 +1,3 @@
-const axios = require('axios');
-require('dotenv').config();
-
-
 //METADATA
 const ExchangeMetaData = {
     Exchanges : {

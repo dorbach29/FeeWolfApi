@@ -31,6 +31,7 @@ router.get("/cheapest", (req, res, next) => {
   console.log(`GET /exchange/cheapest`);
   let transactionFees = getAllTransactions(amount, true);
   let sortedData = sortTransactions(transactionFees);
+  console.log(sortedData);
   res.json(sortedData);
 })
 
